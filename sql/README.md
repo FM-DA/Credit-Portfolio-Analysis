@@ -1,3 +1,3 @@
-# SQL Scripts
+# SQL-скрипты
 
-This folder contains SQL scripts used for credit portfolio analysis.
+В данной папке содержатся SQL-скрипты, используемые для формирования витрин данных и анализа качества кредитного портфеля.
