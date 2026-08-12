@@ -1,3 +1,3 @@
 # Power BI
 
-This folder contains dashboard screenshots and data model images.
+В данной папке содержатся скриншоты дашбордов, модели данных и другие материалы, связанные с визуализацией показателей кредитного портфеля.
