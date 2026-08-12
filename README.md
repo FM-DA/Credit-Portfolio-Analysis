@@ -1,2 +1,32 @@
-# Credit-Portfolio-Analysis
-SQL and Power BI project for credit portfolio quality analysis, including PAR, RPPU, FPD, Vintage and Roll Rate metrics
+# Анализ качества кредитного портфеля
+
+## О проекте
+
+Проект содержит SQL-скрипты и Power BI дашборды для анализа качества кредитного портфеля банка.
+
+### Используемые инструменты
+
+- PostgreSQL
+- SQL
+- Power BI
+- DAX
+
+### Реализованные аналитические витрины
+
+- Выдачи кредитов
+- Портфель на дату среза
+- PAR-анализ
+- РППУ-анализ
+- FPD-анализ
+- Vintage-анализ
+- Roll Rate-анализ
+
+### Ключевые метрики
+
+- Объем кредитного портфеля
+- PAR 1
+- PAR 30
+- PAR 90
+- FPD
+- РППУ
+- Roll Rate
