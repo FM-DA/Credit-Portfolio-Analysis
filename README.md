@@ -49,6 +49,29 @@
 - FPD
 - РППУ
 - Roll Rate
+## Power BI
+
+В папке [powerbi](powerbi/) представлены скриншоты основных страниц дашборда.
+
+### Кредитный портфель
+
+![Кредитный портфель](powerbi/01_Кредитный_портфель.png)
+
+### PAR30
+
+![PAR30](powerbi/04_PAR30.png)
+
+### РППУ
+
+![РППУ](powerbi/06_РППУ.png)
+
+### Vintage PAR30
+
+![Vintage PAR30](powerbi/08_Винтажный анализ PAR30.png)
+
+### Roll Rate
+
+![Roll Rate](powerbi/11_Roll Rate.png)
 
 ## Структура репозитория
 
