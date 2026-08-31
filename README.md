@@ -67,11 +67,11 @@
 
 ### Vintage PAR30
 
-![Vintage PAR30](powerbi/08_Винтажный анализ PAR30.png)
+![Vintage PAR30](powerbi/08_Винтажный_анализ_PAR30.png)
 
 ### Roll Rate
 
-![Roll Rate](powerbi/11_Roll Rate.png)
+![Roll Rate](powerbi/11_Roll_Rate.png)
 
 ## Структура репозитория
 
