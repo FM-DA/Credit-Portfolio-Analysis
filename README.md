@@ -101,5 +101,5 @@
 ## Структура репозитория
 
 - [sql](sql/) — SQL-скрипты для формирования аналитических витрин
-- Python_automation.ipynb — Python-ноутбук для обработки и подготовки данных
+- [Python_automation.ipynb](Python_automation.ipynb) — Python-ноутбук для обработки и подготовки данных
 - [powerbi](powerbi/) — скриншоты страниц разработанного дашборда Power BI
