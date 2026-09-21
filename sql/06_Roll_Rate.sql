@@ -18,11 +18,12 @@ credit_base AS (
 ),
 months AS (
     -- Формируем даты срезов на конец каждого месяца
+    -- Июнь 2025 нужен для определения предыдущего бакета в июле
     SELECT
         (DATE_TRUNC('month', gs) + INTERVAL '1 month - 1 day')::date AS month_end
     FROM generate_series(
         DATE '2025-06-01',
-        DATE '2026-06-01',
+        DATE '2026-06-30' + INTERVAL '1 day',
         INTERVAL '1 month'
     ) AS gs
 ),
@@ -87,4 +88,5 @@ SELECT
     client_status AS "Статус клиента"
 FROM roll_rate
 WHERE DATE_TRUNC('month', previous_month + INTERVAL '1 month') =
-      DATE_TRUNC('month', month_end);
+      DATE_TRUNC('month', month_end)
+  AND month_end <= DATE '2026-06-30';
