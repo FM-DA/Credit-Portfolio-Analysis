@@ -25,8 +25,8 @@ credit_base AS (
     JOIN first_credit fc
         ON c.credit_hub_id = fc.credit_hub_id
     WHERE c.product_id NOT IN (1258,1244,1238,1248,1241,1291,1237,1240,1210,1242,1239,1289,1206,1223,1288,1207,1224,1205,1269)
-        AND c.disb_date >= DATE '2025-07-01'
-        AND c.disb_date < DATE '2026-07-01'
+        AND c.disb_date >= DATE '{START_DATE}'
+        AND c.disb_date < DATE '{END_DATE}'
 ),
 months AS (
     -- Формируем календарь срезов на конец каждого месяца
@@ -34,8 +34,8 @@ months AS (
         DATE_TRUNC('month', gs)::date AS month_start,
         (DATE_TRUNC('month', gs) + INTERVAL '1 month - 1 day')::date AS month_end
     FROM generate_series(
-        DATE '2025-07-01',
-        DATE '2026-06-01',
+        DATE_TRUNC('month', DATE '{START_DATE}'),
+        DATE_TRUNC('month', DATE '{END_DATE}' - INTERVAL '1 day'),
         INTERVAL '1 month'
     ) gs
 ),
