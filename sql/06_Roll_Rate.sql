@@ -1,12 +1,16 @@
 WITH first_credit AS (
     -- Определяем первый кредит каждого клиента
-    SELECT
+    SELECT 
         credit_hub_id,
-        ROW_NUMBER() OVER(PARTITION BY customer_hub_id ORDER BY disb_date, credit_hub_id) AS rn
+        ROW_NUMBER() OVER(
+            PARTITION BY customer_hub_id
+            ORDER BY disb_date, credit_hub_id
+        ) AS rn
     FROM l2.credits
     WHERE product_id NOT IN (1258,1244,1238,1248,1241,1291,1237,1240,1210,1242,1239,1289,1206,1223,1288,1207,1224,1205,1269)
 ),
 credit_base AS (
+    -- Получаем основные характеристики кредитов
     SELECT
         credit_hub_id,
         credit_id,
@@ -18,17 +22,18 @@ credit_base AS (
 ),
 months AS (
     -- Формируем даты срезов на конец каждого месяца
-    -- Июнь 2025 нужен для определения предыдущего бакета в июле
-    SELECT
+    -- Предыдущий месяц нужен для определения бакета и ОД перед переходом
+    SELECT 
         (DATE_TRUNC('month', gs) + INTERVAL '1 month - 1 day')::date AS month_end
     FROM generate_series(
-        DATE '2025-06-01',
-        DATE '2026-06-30' + INTERVAL '1 day',
+        DATE '{PREVIOUS_MONTH}',
+        DATE '{TARGET_MONTH_END}' + INTERVAL '1 day',
         INTERVAL '1 month'
     ) AS gs
 ),
 portfolio_snapshot AS (
-    -- Определяем бакет просрочки каждого кредита на дату среза
+    -- Формируем состояние каждого кредита на конец каждого месяца
+    -- Определяем бакет просрочки и статус клиента
     SELECT
         ci.credit_id,
         cb.product_id,
@@ -43,20 +48,21 @@ portfolio_snapshot AS (
             WHEN ci.overdue_mainsumm_days BETWEEN 61 AND 90 THEN '61-90'
             ELSE '90+'
         END AS bucket,
-        CASE
+        CASE 
             WHEN fc.rn = 1 THEN 'Новый'
             ELSE 'Повторный'
         END AS client_status
     FROM months m
-    JOIN l2.credits_indicators AS ci
+    JOIN l2.credits_indicators AS ci 
         ON ci.date_range @> m.month_end
-    JOIN credit_base AS cb
+    JOIN credit_base AS cb 
         ON ci.credit_hub_id = cb.credit_hub_id
-    JOIN first_credit AS fc
+    JOIN first_credit AS fc 
         ON ci.credit_hub_id = fc.credit_hub_id
 ),
 roll_rate AS (
-    -- Сопоставляем бакет кредита с предыдущим месяцем
+    -- Сопоставляем состояние кредита с предыдущим месяцем
+    -- LAG позволяет получить предыдущий бакет и остаток ОД
     SELECT
         credit_id,
         product_id,
@@ -72,7 +78,10 @@ roll_rate AS (
             ORDER BY month_end
         ) AS previous_bucket,
         bucket AS current_bucket,
-        som_balance,
+        LAG(som_balance) OVER (
+            PARTITION BY credit_id
+            ORDER BY month_end
+        ) AS previous_som_balance,
         client_status
     FROM portfolio_snapshot
 )
@@ -81,12 +90,13 @@ SELECT
     product_id AS "ID продукта",
     previous_bucket AS "Предыдущий бакет",
     current_bucket AS "Текущий бакет",
-    som_balance AS "Остаток ОД",
+    previous_som_balance AS "Остаток ОД",
     month_end AS "Дата среза",
     branch_id AS "ID филиала",
     office_id AS "ID отделения",
     client_status AS "Статус клиента"
 FROM roll_rate
-WHERE DATE_TRUNC('month', previous_month + INTERVAL '1 month') =
-      DATE_TRUNC('month', month_end)
-  AND month_end <= DATE '2026-06-30';
+-- Оставляем только последовательные месячные переходы
+-- Например, для июля сравниваем июнь с июлем
+WHERE DATE_TRUNC('month', previous_month + INTERVAL '1 month') = DATE_TRUNC('month', month_end)
+  AND month_end <= DATE '{TARGET_MONTH_END}';
