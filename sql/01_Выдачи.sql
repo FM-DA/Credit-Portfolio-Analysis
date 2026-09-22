@@ -30,6 +30,6 @@ SELECT
     c.office_id AS "ID отделения"
 FROM l2.credits AS c
 LEFT JOIN first_credit AS fc ON c.credit_hub_id = fc.credit_hub_id    
-WHERE c.disb_date >= DATE '2025-07-01'
-    AND c.disb_date < DATE '2026-07-01'
+WHERE c.disb_date >= DATE '{START_DATE}'
+    AND c.disb_date < DATE '{END_DATE}'
     AND c.product_id NOT IN (1258,1244,1238,1248,1241,1291,1237,1240,1210,1242,1239,1289,1206,1223,1288,1207,1224,1205,1269)
