@@ -25,8 +25,8 @@ credit_base AS (
         office_id
     FROM l2.credits
     WHERE product_id NOT IN (1258,1244,1238,1248,1241,1291,1237,1240,1210,1242,1239,1289,1206,1223,1288,1207,1224,1205,1269)
-        AND disb_date >= DATE '2025-07-01'
-        AND disb_date < DATE '2026-07-01'
+        AND disb_date >= DATE '{START_DATE}'
+        AND disb_date < DATE '{END_DATE}'
 ),
 fpd_base AS (
     SELECT
