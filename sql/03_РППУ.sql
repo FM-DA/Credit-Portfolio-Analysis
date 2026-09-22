@@ -36,5 +36,5 @@ JOIN onlinebankdb_func.credits_aggregate_reports_get_rppu_info AS ca
 JOIN first_credit AS fc 
     ON fc.credit_hub_id = c.credit_hub_id 
 WHERE c.product_id NOT IN (1258,1244,1238,1248,1241,1291,1237,1240,1210,1242,1239,1289,1206,1223,1288,1207,1224,1205,1269)
-    AND ca.end_month >= DATE '2025-07-01'
-    AND ca.end_month < DATE '2026-07-01';
+    AND ca.end_month >= DATE '{START_DATE}'
+    AND ca.end_month < DATE '{END_DATE}';
